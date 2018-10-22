@@ -258,21 +258,22 @@
   
 
 (defun nfa->dfa (nfa)
-
+  (setf edges (finite-automaton-edges nfa))
+  
   (let ((hash (make-hash-table)))
     (e-closure (finite-automaton-states nfa) (finite-automaton-edges nfa) hash)
 
     (setf (finite-automaton-alphabet nfa) (remove :epsilon (finite-automaton-alphabet nfa)))
-
-    (loop for edge in (finite-automaton-edges nfa)
+    (print (finite-automaton-alphabet nfa))
+    (loop for edge in edges
        do(if (equal (second edge) :epsilon)
-	     (setf (finite-automaton-edges nfa) (remove edge (finite-automaton-edges nfa) :test #'equal))))
-
-    (print (finite-automaton-edges nfa))
+	     (setf edges (remove edge edges :test #'equal))))
+    (print edges) 
     (loop for k in (finite-automaton-states nfa)
        do (print k)
 	  (print (gethash k hash)))
     )
+)
 )
 
 
